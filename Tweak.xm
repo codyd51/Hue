@@ -132,9 +132,16 @@ NSMutableArray* allLabels;
     NSLog(@"beginMinutes: %i", (int)beginMinutes);
     NSLog(@"endMinutes: %i", (int)endMinutes);
 
+    CGFloat startTime = formattedHour * 60;
+	CGFloat progress = beginMinutes;
+	if (endMinutes < startTime) endMinutes += 12*60	;
+	CGFloat formattedTimeProgess = (progress - startTime)/(endMinutes - startTime);
+
+/*
     CGFloat formattedTimeProgess = (beginMinutes < endMinutes) ? 
-    								beginMinutes/endMinutes : 
-    								endMinutes/beginMinutes;
+    								(beginMinutes - formattedHour*60)/(endMinutes - formattedHour*60) : 
+    								(endMinutes - formattedHour*60)/(beginMinutes - formattedHour*60);
+*/
     NSLog(@"formattedTimeProgess: %f", formattedTimeProgess);
 
     CGFloat red;
@@ -183,7 +190,7 @@ NSMutableArray* allLabels;
 }
 -(id)textColor {
 	UIColor* r = %orig;
-	if (r) {
+	if (r) { 
 		//We mix the two colors together 
 		//This applies our color to whatever color originally would have been there
 		CGFloat alpha = [r getRed:nil green:nil blue:nil alpha:&alpha];
@@ -194,11 +201,7 @@ NSMutableArray* allLabels;
 }
 
 -(void)setTextColor:(id)color {
-	//We mix the two colors together
-	//This applies our color to whatever color originally would have been there
-	CGFloat alpha = [color getRed:nil green:nil blue:nil alpha:&alpha];
-	%orig([[[HueColorModel sharedInstance] currentTimeCoordinatedColor] blendWithColor:color alpha:alpha]);
-	//%orig([[HueColorModel sharedInstance] currentTimeCoordinatedColor]);
+	%orig([self textColor]);
 }
 %end
 
@@ -235,13 +238,19 @@ void updateLabels() {
 }
 %end
 
-%ctor {
-	CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), 
+%hook UIApplication
+-(id)init {
+	id r = %orig;
+	if (r) {
+		CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), 
 									NULL, 
 									(CFNotificationCallback)updateLabels, 
 									CFSTR("com.phillipt.hue.update"), 
 									NULL, 
 									CFNotificationSuspensionBehaviorCoalesce);
 
-	allLabels = [[NSMutableArray alloc] init];
+		allLabels = [[NSMutableArray alloc] init];
+	}
+	return r;
 }
+%end 
