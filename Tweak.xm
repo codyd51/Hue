@@ -32,25 +32,25 @@ typedef NS_ENUM(NSInteger, HueDaySegment) {
 };
 
 HueDaySegment daySegmentForHour(int hour) {
-	if (hour >= 6 && hour < 11) {
+	if (hour >= HueDaySegmentMorning && hour < HueDaySegmentMidday) {
 		return HueDaySegmentMorning;
 	}
-	else if (hour >= 11 && hour < 17) {
+	else if (hour >= HueDaySegmentMidday && hour < HueDaySegmentSundown) {
 		return HueDaySegmentMidday;
 	}
-	else if (hour >= 17 && hour < 21) {
+	else if (hour >= HueDaySegmentSundown && hour < HueDaySegmentNight) {
 		return HueDaySegmentSundown;
 	}
 	return HueDaySegmentNight;
 }
 HueDaySegment nextDaySegmentForHour(int hour) {
-	if (hour >= 6 && hour < 11) {
+	if (hour >= HueDaySegmentMorning && hour < HueDaySegmentMidday) {
 		return HueDaySegmentMidday;
 	}
-	else if (hour >= 11 && hour < 17) {
+	else if (hour >= HueDaySegmentMidday && hour < HueDaySegmentSundown) {
 		return HueDaySegmentSundown;
 	}
-	else if (hour >= 17 && hour < 21) {
+	else if (hour >= HueDaySegmentSundown && hour < HueDaySegmentNight) {
 		return HueDaySegmentNight;
 	}
 	return HueDaySegmentMorning;
