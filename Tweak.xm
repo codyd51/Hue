@@ -57,21 +57,21 @@ HueDaySegment nextDaySegmentForHour(int hour) {
 }
 
 void adjustColorsToHour(int hour, CGFloat *red, CGFloat *green, CGFloat *blue) {
-	if (hour >= 6 && hour < 11) {
+	if (hour >= HueDaySegmentMorning && hour < HueDaySegmentMidday) {
     	//yellow
     	NSLog(@"Hour %i is yellow", hour);
 		*red = 255;
 		*green = 252;
 		*blue = 11;
 	}
-	else if (hour >= 11 && hour < 17) {
+	else if (hour >= HueDaySegmentMidday && hour < HueDaySegmentSundown) {
 		//light blue
 		NSLog(@"Hour %i is light blue", hour);
 		*red = 91;
 		*green = 230;
 		*blue = 186;
 	}
-	else if (hour >= 17 && hour < 21) {
+	else if (hour >= HueDaySegmentSundown && hour < HueDaySegmentNight) {
 		//orange
 		NSLog(@"Hour %i is orange", hour);
 		*red = 230;
